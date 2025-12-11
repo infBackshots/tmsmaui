@@ -1,0 +1,220 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TruckingTmsMaui.App.ViewModels"
+             xmlns:core="clr-namespace:TruckingTmsMaui.Core.Entities;assembly=TruckingTmsMaui.Core"
+             xmlns:enums="clr-namespace:TruckingTmsMaui.Core.Enums;assembly=TruckingTmsMaui.Core"
+             x:Class="TruckingTmsMaui.App.Pages.JobDetailPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:JobDetailViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid ColumnDefinitions="*, Auto" Margin="20" ColumnSpacing="20">
+
+        <!-- Left Column: Core Details & Sections -->
+        <ScrollView Grid.Column="0">
+            <VerticalStackLayout Spacing="20">
+                
+                <!-- Job Header -->
+                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                    <Label Text="{Binding Job.JobName}" FontSize="Title" FontAttributes="Bold" TextColor="#003566"/>
+                    <Frame CornerRadius="15" Padding="10, 5" BackgroundColor="#E0F0FF" IsVisible="{Binding Job.Status}">
+                        <Label Text="{Binding Job.Status}" FontSize="Small" TextColor="#003566"/>
+                    </Frame>
+                </HorizontalStackLayout>
+                
+                <!-- Core Details Section -->
+                <Frame CornerRadius="10" Padding="15" HasShadow="True">
+                    <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Job Number" FontAttributes="Bold"/>
+                        <Entry Grid.Row="0" Grid.Column="1" Text="{Binding Job.JobNumber}"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="Commodity" FontAttributes="Bold"/>
+                        <Entry Grid.Row="1" Grid.Column="1" Text="{Binding Job.CommodityBeingHauled}"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Pickup Date/Time" FontAttributes="Bold"/>
+                        <DatePicker Grid.Row="2" Grid.Column="1" Date="{Binding Job.PickupDate}"/>
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Delivery Date/Time" FontAttributes="Bold"/>
+                        <DatePicker Grid.Row="3" Grid.Column="1" Date="{Binding Job.DeliveryDate}"/>
+
+                        <Label Grid.Row="4" Grid.Column="0" Text="BOL Number" FontAttributes="Bold"/>
+                        <Entry Grid.Row="4" Grid.Column="1" Text="{Binding Job.BolNumber}"/>
+                    </Grid>
+                </Frame>
+                
+                <!-- Driver & Equipment Section -->
+                <Frame CornerRadius="10" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Driver & Equipment" FontSize="Medium" FontAttributes="Bold" TextColor="#003566"/>
+                        <Picker Title="Select Driver" 
+                                ItemsSource="{Binding AvailableDrivers}"
+                                ItemDisplayBinding="{Binding FullName}"
+                                SelectedItem="{Binding SelectedDriver}"/>
+
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="10" RowSpacing="10">
+                            <Label Grid.Column="0" Text="Truck #" FontAttributes="Bold"/>
+                            <Entry Grid.Column="1" Text="{Binding Job.TruckNumber}"/>
+                            <Label Grid.Row="1" Grid.Column="0" Text="Trailer #" FontAttributes="Bold"/>
+                            <Entry Grid.Row="1" Grid.Column="1" Text="{Binding Job.TrailerNumber}"/>
+                        </Grid>
+                        
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Label Text="Dispatched:" FontAttributes="Bold"/>
+                            <CheckBox IsChecked="{Binding Job.IsDispatched}"/>
+                            <DatePicker Date="{Binding Job.DispatchDateTime}"/>
+                        </HorizontalStackLayout>
+                        
+                        <!-- Simplified Time tracking -->
+                        <Label Text="Arrival Times (Actual)" FontAttributes="Bold" Margin="0, 5, 0, 0"/>
+                        <HorizontalStackLayout Spacing="10">
+                             <TimePicker Time="{Binding Job.ActualPickupTime}" WidthRequest="100"/>
+                             <Label Text="Pickup" VerticalOptions="Center"/>
+                             <TimePicker Time="{Binding Job.ActualDeliveryTime}" WidthRequest="100"/>
+                             <Label Text="Delivery" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Customer & Billing Section -->
+                <Frame CornerRadius="10" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Customer & Billing" FontSize="Medium" FontAttributes="Bold" TextColor="#003566"/>
+                        
+                        <Label Text="Broker/Customer Name" FontAttributes="Bold"/>
+                        <Entry Text="{Binding Job.BrokerOrCustomerName}"/>
+
+                        <Label Text="Billing Terms" FontAttributes="Bold"/>
+                        <Picker ItemsSource="{Binding BillingTermsOptions}" 
+                                SelectedItem="{Binding Job.CustomerBillingTerms}"/>
+                        
+                        <Label Text="Rate Confirmation Uploaded:" FontAttributes="Bold"/>
+                        <CheckBox IsChecked="{Binding Job.RateConfirmationUploaded}"/>
+                        
+                        <!-- Integration with Client Profile (Simplified UI) -->
+                        <Label Text="Client Profile (Optional)" FontAttributes="Bold" Margin="0, 10, 0, 0"/>
+                        <Picker Title="Select Client Profile" 
+                                ItemsSource="{Binding AvailableClientProfiles}"
+                                ItemDisplayBinding="{Binding DisplayName}"
+                                SelectedItem="{Binding SelectedClientProfile}"
+                                IsVisible="{Binding IsNotNewJob}"/>
+                        
+                        <Button Text="View Client Profile" 
+                                Command="{Binding ViewClientProfileCommand}"
+                                IsVisible="{Binding SelectedClientProfile}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Leaser Section (Conditional Visibility) -->
+                <Frame CornerRadius="10" Padding="15" HasShadow="True" IsVisible="{Binding Job.IsLeaser}">
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Label Text="OUTSOURCED (LEASER) JOB" FontSize="Medium" FontAttributes="Bold" TextColor="#F39C12"/>
+                            <CheckBox IsChecked="{Binding Job.IsLeaser}"/>
+                        </HorizontalStackLayout>
+                        
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="10" RowSpacing="10">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Leaser Company" FontAttributes="Bold"/>
+                            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding Job.LeaserCompanyName}"/>
+                            
+                            <Label Grid.Row="1" Grid.Column="0" Text="Rate Leaser Charges You" FontAttributes="Bold"/>
+                            <Entry Grid.Row="1" Grid.Column="1" Text="{Binding Job.RateLeaserChargesYou, StringFormat='C2'}"/>
+
+                            <Label Grid.Row="2" Grid.Column="0" Text="Rate You Charge Client" FontAttributes="Bold"/>
+                            <Entry Grid.Row="2" Grid.Column="1" Text="{Binding Job.RateYouChargeClient, StringFormat='C2'}"/>
+                            
+                            <Label Grid.Row="3" Grid.Column="0" Text="PROFIT MARGIN" FontAttributes="Bold" TextColor="Green"/>
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Job.ProfitMargin, StringFormat='C2'}" FontAttributes="Bold" TextColor="Green"/>
+                        </Grid>
+                        
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center" Margin="0, 10, 0, 0">
+                            <Label Text="Leaser Bill Entered in QBO:" FontAttributes="Bold"/>
+                            <CheckBox IsChecked="{Binding Job.LeaserBillEnteredInQbo}"/>
+                        </HorizontalStackLayout>
+                        
+                        <Button Text="Upload Leaser Invoice" Command="{Binding UploadDocumentCommand}" 
+                                CommandParameter="{x:Static enums:DocumentType.LeaserInvoice}"
+                                BackgroundColor="#54A3FF" TextColor="White" CornerRadius="8"/>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <Frame CornerRadius="10" Padding="15" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Notes / Special Instructions" FontSize="Medium" FontAttributes="Bold" TextColor="#003566"/>
+                        <Editor Text="{Binding Job.NotesSpecialInstructions}" HeightRequest="150" BackgroundColor="#F7F9FB"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Right Column: Save/Actions and Documents -->
+        <VerticalStackLayout Grid.Column="1" Spacing="20" WidthRequest="300">
+            
+            <!-- Save/Action Buttons -->
+            <VerticalStackLayout Spacing="10">
+                <Button Text="Save Job" 
+                        Command="{Binding SaveJobCommand}" 
+                        BackgroundColor="#28A745" 
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50"/>
+                
+                <Button Text="Mark as Invoiced" 
+                        Command="{Binding UpdateStatusCommand}" 
+                        CommandParameter="{x:Static enums:JobStatus.Invoiced}"
+                        BackgroundColor="#007BFF" 
+                        TextColor="White"
+                        CornerRadius="8"/>
+                
+                <Button Text="Delete Job" 
+                        Command="{Binding DeleteJobCommand}" 
+                        BackgroundColor="#DC3545" 
+                        TextColor="White"
+                        CornerRadius="8"/>
+            </VerticalStackLayout>
+            
+            <!-- Documents Section -->
+            <Frame CornerRadius="10" Padding="15" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Documents" FontSize="Medium" FontAttributes="Bold" TextColor="#003566"/>
+                    
+                    <Label Text="BOL & POD" FontAttributes="Bold"/>
+                    <HorizontalStackLayout Spacing="5">
+                        <Button Text="Upload BOL" Command="{Binding UploadDocumentCommand}" 
+                                CommandParameter="{x:Static enums:DocumentType.Bol}" StyleClass="SmallButton"/>
+                        <Button Text="Upload POD" Command="{Binding UploadDocumentCommand}" 
+                                CommandParameter="{x:Static enums:DocumentType.Pod}" StyleClass="SmallButton"/>
+                    </HorizontalStackLayout>
+                    
+                    <Label Text="Rate Con & Ticket" FontAttributes="Bold" Margin="0, 10, 0, 0"/>
+                    <HorizontalStackLayout Spacing="5">
+                        <Button Text="Upload Rate Con" Command="{Binding UploadDocumentCommand}" 
+                                CommandParameter="{x:Static enums:DocumentType.RateConfirmation}" StyleClass="SmallButton"/>
+                        <Button Text="Upload Ticket" Command="{Binding UploadDocumentCommand}" 
+                                CommandParameter="{x:Static enums:DocumentType.Ticket}" StyleClass="SmallButton"/>
+                    </HorizontalStackLayout>
+                    
+                    <!-- Document List -->
+                    <Label Text="Attached Files:" FontAttributes="Italic" Margin="0, 15, 0, 5"/>
+                    <CollectionView ItemsSource="{Binding Job.DocumentAttachments}" HeightRequest="200">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="core:DocumentAttachment">
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="&#xf15b;" FontSize="Small" FontFamily="FontAwesomeSolid" TextColor="#003566"/>
+                                    <Label Text="{Binding FileName}" FontSize="Micro" TextColor="#333"/>
+                                    <Label Text="{Binding DocumentType}" FontSize="Micro" FontAttributes="Italic" TextColor="#999"/>
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </Grid>
+
+    <ContentPage.Resources>
+        <StyleSheet Source="../Resources/Styles/TmsStyles.css" />
+    </ContentPage.Resources>
+</ContentPage>

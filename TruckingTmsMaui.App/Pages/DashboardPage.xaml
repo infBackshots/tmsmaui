@@ -1,0 +1,76 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TruckingTmsMaui.App.ViewModels"
+             xmlns:core="clr-namespace:TruckingTmsMaui.Core.Enums"
+             x:Class="TruckingTmsMaui.App.Pages.DashboardPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:DashboardViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Label Text="Operations Dashboard" FontSize="Large" FontAttributes="Bold" TextColor="#003566"/>
+            <Label Text="Welcome to Utah Trucking TMS. Showing live data for the Salt Lake City Metro Area." FontSize="Small" TextColor="#666"/>
+
+            <!-- Dashboard Grid (Simplified 2x3 grid) -->
+            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto" ColumnSpacing="15" RowSpacing="15">
+                
+                <!-- Widget 1: Today’s Dispatch -->
+                <Frame Grid.Row="0" Grid.Column="0" CornerRadius="10" Padding="20" BackgroundColor="White" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Today's Dispatch Summary" FontSize="Medium" FontAttributes="Bold" TextColor="#003566"/>
+                        <Label Text="Scheduled: 12" TextColor="Green"/>
+                        <Label Text="In-Transit: 4" TextColor="Orange"/>
+                        <Label Text="Delivered: 8" TextColor="#3498DB"/>
+                        <Button Text="View Dispatch Board" Command="{Binding GoToDispatchCommand}" Style="{StaticResource WidgetButton}" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Widget 2: Jobs at Risk (Missing PODs/Late) -->
+                <Frame Grid.Row="0" Grid.Column="1" CornerRadius="10" Padding="20" BackgroundColor="White" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Jobs at Risk" FontSize="Medium" FontAttributes="Bold" TextColor="#E74C3C"/>
+                        <Label Text="Missing PODs: 3 (Critical)" TextColor="#E74C3C"/>
+                        <Label Text="Late Deliveries: 1 (SLC Drop)" TextColor="Orange"/>
+                        <Label Text="HOS Conflicts: 0 (Good)" TextColor="Green"/>
+                        <Button Text="View Risky Jobs" Command="{Binding GoToJobsListCommand}" CommandParameter="{x:Static core:JobStatus.Delivered}" Style="{StaticResource WidgetButton}" />
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Widget 3: Maintenance & Compliance -->
+                <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" Padding="20" BackgroundColor="White" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Fleet Compliance" FontSize="Medium" FontAttributes="Bold" TextColor="#003566"/>
+                        <Label Text="Overdue DVIR: 1 (Truck 102)" TextColor="#E74C3C"/>
+                        <Label Text="IFTA Progress: 75% Utah Miles" TextColor="Green"/>
+                        <Label Text="Upcoming Service: 2 Vehicles" TextColor="Orange"/>
+                        <Button Text="View Fleet" Style="{StaticResource WidgetButton}" />
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Widget 4: Finance Snapshot -->
+                <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" Padding="20" BackgroundColor="White" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Finance Snapshot" FontSize="Medium" FontAttributes="Bold" TextColor="#003566"/>
+                        <Label Text="A/R Aging: $15,000 (30+ Days)" TextColor="#E74C3C"/>
+                        <Label Text="Leaser Profit Margin: 18.5%" TextColor="Green"/>
+                        <Label Text="Uninvoiced Loads: 5" TextColor="Orange"/>
+                        <Button Text="View Invoices" Style="{StaticResource WidgetButton}" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Styles for Widgets -->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroupList>
+                    <VisualStateGroup Name="CommonStates">
+                        <VisualState Name="Normal" />
+                        <VisualState Name="Disabled" />
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </VisualStateManager.VisualStateGroups>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

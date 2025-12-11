@@ -1,0 +1,81 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TruckingTmsMaui.App.ViewModels"
+             xmlns:core="clr-namespace:TruckingTmsMaui.Core.Entities;assembly=TruckingTmsMaui.Core"
+             x:Class="TruckingTmsMaui.App.Pages.JobsListPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:JobsListViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto, *" Margin="20">
+        
+        <!-- Toolbar & Filters -->
+        <HorizontalStackLayout Grid.Row="0" Spacing="10" Margin="0, 0, 0, 20">
+            <SearchBar Placeholder="Search Job #, Broker, BOL..." WidthRequest="300" 
+                       Text="{Binding SearchText, Mode=TwoWay}" 
+                       SearchCommand="{Binding SearchCommand}"/>
+            
+            <!-- Simple Status Filter Picker -->
+            <Picker Title="Filter by Status" 
+                    ItemsSource="{Binding JobStatuses}"
+                    SelectedItem="{Binding SelectedJobStatus}"
+                    WidthRequest="150"
+                    SelectedIndexChanged="OnStatusFilterChanged"/>
+            
+            <Button Text="New Job" 
+                    Command="{Binding CreateNewJobCommand}"
+                    BackgroundColor="#006400" 
+                    TextColor="White"
+                    CornerRadius="8"/>
+        </HorizontalStackLayout>
+
+        <!-- Jobs List (Using a CollectionView for a table-like view) -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding FilteredJobs}" SelectionMode="Single"
+                        SelectedItem="{Binding SelectedJob, Mode=TwoWay}">
+            <CollectionView.Header>
+                <!-- Table Header -->
+                <Grid ColumnDefinitions="*, 2*, 1.5*, 1.5*, 1.5*, 1*" BackgroundColor="#E0E0E0" Padding="10">
+                    <Label Grid.Column="0" Text="Job #" FontAttributes="Bold" TextColor="#333"/>
+                    <Label Grid.Column="1" Text="Customer / Broker" FontAttributes="Bold" TextColor="#333"/>
+                    <Label Grid.Column="2" Text="P/U → Del. (City)" FontAttributes="Bold" TextColor="#333"/>
+                    <Label Grid.Column="3" Text="Revenue" FontAttributes="Bold" TextColor="#333"/>
+                    <Label Grid.Column="4" Text="Status" FontAttributes="Bold" TextColor="#333"/>
+                    <Label Grid.Column="5" Text="Leaser?" FontAttributes="Bold" TextColor="#333"/>
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="core:Job">
+                    <!-- Table Row -->
+                    <Grid ColumnDefinitions="*, 2*, 1.5*, 1.5*, 1.5*, 1*" Padding="10" HeightRequest="40">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualState Name="Normal" />
+                                <VisualState Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#BBDDFF" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        
+                        <Label Grid.Column="0" Text="{Binding JobNumber}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding BrokerOrCustomerName}" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" VerticalOptions="Center">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} → {1}">
+                                    <Binding Path="PickupAddress" Converter="{StaticResource CityExtractorConverter}"/>
+                                    <Binding Path="DeliveryAddress" Converter="{StaticResource CityExtractorConverter}"/>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                        <Label Grid.Column="3" Text="{Binding TotalRevenue, StringFormat='C2'}" VerticalOptions="Center"/>
+                        <Label Grid.Column="4" Text="{Binding Status}" VerticalOptions="Center"/>
+                        <Label Grid.Column="5" Text="{Binding IsLeaser}" VerticalOptions="Center" FontAttributes="Bold" TextColor="{Binding IsLeaser, Converter={StaticResource BoolToColorConverter}}"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,72 @@
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:TruckingTmsMaui.App.ViewModels"
+    x:Class="TruckingTmsMaui.App.Pages.LoginPage"
+    Title="Login"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F0F4F8">
+
+    <ContentPage.BindingContext>
+        <vm:LoginViewModel x:Name="LoginVm" />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto, Auto, *" Margin="30">
+        <!-- Header / Logo Area -->
+        <VerticalStackLayout Grid.Row="0" HorizontalOptions="Center" Margin="0, 50, 0, 30">
+            <Label Text="🚛" FontSize="80" HorizontalOptions="Center" />
+            <Label Text="Trucking TMS Login" 
+                   FontSize="Title" 
+                   FontAttributes="Bold" 
+                   TextColor="#003566" 
+                   HorizontalOptions="Center" />
+            <Label Text="Utah Operations Management" 
+                   FontSize="Subtitle" 
+                   TextColor="#666" 
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+        
+        <!-- Login Form Area (Max width 400 for desktop feel) -->
+        <Frame Grid.Row="1" WidthRequest="400" Padding="30" CornerRadius="12" HasShadow="True" BackgroundColor="White">
+            <VerticalStackLayout Spacing="15">
+                
+                <Label Text="Username" FontSize="Small" TextColor="#003566" />
+                <Entry Text="{Binding Username}" 
+                       Placeholder="e.g., dispatch or driver1" 
+                       Keyboard="Email"
+                       TextColor="#333"
+                       BackgroundColor="#F7F9FB"
+                       HeightRequest="45"
+                       ClearButtonVisibility="WhileEditing"/>
+
+                <Label Text="Password" FontSize="Small" TextColor="#003566" />
+                <Entry Text="{Binding Password}" 
+                       Placeholder="P@ssw0rd1" 
+                       IsPassword="True"
+                       TextColor="#333"
+                       BackgroundColor="#F7F9FB"
+                       HeightRequest="45"
+                       ClearButtonVisibility="WhileEditing"/>
+
+                <Button Text="Login" 
+                        Command="{Binding LoginCommand}" 
+                        IsEnabled="{Binding IsNotBusy}"
+                        BackgroundColor="#003566"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Margin="0, 10, 0, 0"/>
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                                   IsVisible="{Binding IsBusy}" 
+                                   Color="#003566" />
+                
+                <Label Text="{Binding ErrorMessage}" 
+                       IsVisible="{Binding HasError}" 
+                       TextColor="Red" 
+                       HorizontalTextAlignment="Center" />
+
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,98 @@
+/* ---------------------------------- */
+/* Global MAUI App Styles             */
+/* ---------------------------------- */
+
+* {
+    font-family: 'OpenSansRegular';
+}
+
+/* Page Background */
+ContentPage {
+    background-color: #F0F4F8; /* Light gray background for a modern look */
+}
+
+/* Primary Color Palette */
+:root {
+    --primary-color: #003566; /* Deep Blue */
+    --accent-color: #FFC300; /* Yellow/Gold for accents */
+    --success-color: #28A745;
+    --danger-color: #DC3545;
+    --warning-color: #F39C12;
+}
+
+/* Button Styling */
+Button {
+    font-family: 'OpenSansSemibold';
+    border-radius: 8;
+    height-request: 45;
+    font-size: 16;
+    padding: 10, 20;
+    margin: 5;
+    border-width: 0;
+}
+
+/* Widget Buttons (smaller for dashboards) */
+.WidgetButton {
+    background-color: #E0F0FF;
+    color: var(--primary-color);
+    border-color: #BBDDFF;
+    border-width: 1;
+    height-request: 35;
+    font-size: 14;
+}
+
+/* Small Buttons (for detail page actions) */
+.SmallButton {
+    background-color: #A3A3A3;
+    color: White;
+    font-size: 12;
+    height-request: 30;
+    padding: 5;
+    border-radius: 6;
+}
+
+/* Entry/Editor Styling */
+Entry, Editor {
+    background-color: White;
+    border-color: #DDD;
+    border-width: 1;
+    border-radius: 6;
+    padding: 10;
+    color: #333;
+}
+
+/* Frame (Card) Styling */
+Frame {
+    border-radius: 10;
+    border-color: #EEE;
+    border-width: 1;
+}
+
+/* Label/Text Styling */
+Label.Title {
+    font-size: 24;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+Label.Subtitle {
+    font-size: 18;
+    font-weight: 600;
+    color: #666;
+}
+
+/* Shell Navigation Custom Icons (using FontAwesome Solid) */
+/* Requires the FontAwesomeSolid font to be loaded in MauiProgram.cs */
+
+ShellContent[Icon="&#xf0e4;"] { font-family: FontAwesomeSolid; } /* Dashboard */
+ShellContent[Icon="&#xf466;"] { font-family: FontAwesomeSolid; } /* Jobs / Orders */
+ShellContent[Icon="&#xf0d1;"] { font-family: FontAwesomeSolid; } /* Dispatch */
+ShellContent[Icon="&#xf543;"] { font-family: FontAwesomeSolid; } /* Customers */
+ShellContent[Icon="&#xf155;"] { font-family: FontAwesomeSolid; } /* Finance */
+ShellContent[Icon="&#xf0cd;"] { font-family: FontAwesomeSolid; } /* Drivers */
+ShellContent[Icon="&#xf0ad;"] { font-family: FontAwesomeSolid; } /* Admin */
+
+/* Mobile Driver Tabs */
+ShellContent[Icon="&#xf015;"] { font-family: FontAwesomeSolid; } /* Home */
+ShellContent[Icon="&#xf0c4;"] { font-family: FontAwesomeSolid; } /* Trips */
+ShellContent[Icon="&#xf2f2;"] { font-family: FontAwesomeSolid; } /* HOS */

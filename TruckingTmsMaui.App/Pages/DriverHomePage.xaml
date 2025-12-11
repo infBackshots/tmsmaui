@@ -1,0 +1,71 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TruckingTmsMaui.App.ViewModels"
+             x:Class="TruckingTmsMaui.App.Pages.DriverHomePage"
+             Title="{Binding Title}"
+             Shell.TabBarIsVisible="True"
+             BackgroundColor="#F0F4F8">
+
+    <ContentPage.BindingContext>
+        <vm:DriverHomeViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="25">
+            
+            <Label Text="Driver Dashboard" 
+                   FontSize="Large" 
+                   FontAttributes="Bold" 
+                   TextColor="#003566"
+                   HorizontalOptions="Center"/>
+
+            <!-- Next Load Summary Card -->
+            <Frame CornerRadius="15" Padding="20" BackgroundColor="#E6F2FF" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="NEXT LOAD" FontSize="Subtitle" FontAttributes="Bold" TextColor="#003566"/>
+                    <Label Text="{Binding NextJob.JobName}" FontSize="Medium" FontAttributes="Bold" TextColor="#333"/>
+                    
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Pickup:" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Text="{Binding NextJob.PickupAddress}"/>
+                        <Label Grid.Row="1" Grid.Column="0" Text="Delivery:" FontAttributes="Bold"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding NextJob.DeliveryAddress}"/>
+                        <Label Grid.Row="2" Grid.Column="0" Text="ETA:" FontAttributes="Bold"/>
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding NextJob.EstimatedPickupTime, StringFormat='{0:ddd, MMM dd h:mm tt}'}" TextColor="#006400"/>
+                    </Grid>
+                    
+                    <Button Text="Start Trip Workflow" 
+                            Command="{Binding StartTripCommand}" 
+                            BackgroundColor="#006400" 
+                            TextColor="White"
+                            CornerRadius="10"
+                            Margin="0, 10, 0, 0"/>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Quick Actions -->
+            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto" ColumnSpacing="15" RowSpacing="15">
+                <Button Grid.Column="0" Text="Upload POD/Docs" 
+                        Command="{Binding UploadPodCommand}" 
+                        BackgroundColor="#007BFF" 
+                        TextColor="White" CornerRadius="10" HeightRequest="60"/>
+                
+                <Button Grid.Column="1" Text="HOS / Status Change" 
+                        Command="{Binding HOSCommand}" 
+                        BackgroundColor="#F39C12" 
+                        TextColor="White" CornerRadius="10" HeightRequest="60"/>
+
+                <Button Grid.Row="1" Grid.Column="0" Text="Check Calls" 
+                        Command="{Binding CheckCallsCommand}" 
+                        BackgroundColor="#A3A3A3" 
+                        TextColor="White" CornerRadius="10" HeightRequest="60"/>
+
+                <Button Grid.Row="1" Grid.Column="1" Text="Report Issue" 
+                        Command="{Binding ReportIssueCommand}" 
+                        BackgroundColor="#DC3545" 
+                        TextColor="White" CornerRadius="10" HeightRequest="60"/>
+            </Grid>
+            
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

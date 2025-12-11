@@ -1,0 +1,127 @@
+<Shell 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:TruckingTmsMaui.App"
+    xmlns:pages="clr-namespace:TruckingTmsMaui.App.Pages"
+    xmlns:vm="clr-namespace:TruckingTmsMaui.App.ViewModels"
+    x:Class="TruckingTmsMaui.App.AppShell"
+    Shell.FlyoutBehavior="Flyout"
+    FlyoutWidth="250"
+    Shell.BackgroundColor="#003566"
+    Shell.TitleColor="White"
+    Shell.NavBarHasShadow="True">
+
+    <Shell.BindingContext>
+        <vm:AppShellViewModel x:Name="ShellVm" />
+    </Shell.BindingContext>
+
+    <Shell.FlyoutHeader>
+        <Grid Padding="20">
+            <Label Text="Trucking TMS" 
+                   TextColor="White" 
+                   FontSize="Title" 
+                   FontAttributes="Bold" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutFooter>
+        <VerticalStackLayout Padding="20">
+            <Button Text="Logout" 
+                    Command="{Binding LogoutCommand}"
+                    TextColor="#003566"
+                    BackgroundColor="White"
+                    CornerRadius="8"
+                    Margin="0,20,0,0"/>
+            <Label Text="{Binding UserRoleText}" 
+                   TextColor="White" 
+                   HorizontalOptions="Center" 
+                   Margin="0,5,0,0"/>
+        </VerticalStackLayout>
+    </Shell.FlyoutFooter>
+
+    <!-- 1. Dashboard - Visible to all operational roles -->
+    <FlyoutItem Title="Dashboard" Icon="&#xf0e4;" IsVisible="{Binding IsOperationalUser}">
+        <ShellContent
+            Title="Dashboard"
+            ContentTemplate="{DataTemplate pages:DashboardPage}"
+            Route="Dashboard" />
+    </FlyoutItem>
+
+    <!-- 2. Orders / Jobs - Dispatcher/Admin/Finance/FleetOps -->
+    <FlyoutItem Title="Jobs / Orders" Icon="&#xf466;" IsVisible="{Binding IsOperationalUser}">
+        <ShellContent
+            Title="All Jobs"
+            ContentTemplate="{DataTemplate pages:JobsListPage}"
+            Route="JobsList" />
+    </FlyoutItem>
+    
+    <!-- 3. Dispatch - Dispatcher/Admin -->
+    <FlyoutItem Title="Dispatch" Icon="&#xf0d1;" IsVisible="{Binding IsDispatcherOrAdmin}">
+        <ShellContent
+            Title="Planning Board"
+            ContentTemplate="{DataTemplate pages:DispatchBoardPage}"
+            Route="DispatchBoard" />
+    </FlyoutItem>
+    
+    <!-- 7. Customers - Dispatcher/Admin/Finance -->
+    <FlyoutItem Title="Customers" Icon="&#xf543;" IsVisible="{Binding IsFinanceOrAdmin}">
+        <ShellContent
+            Title="Accounts"
+            ContentTemplate="{DataTemplate pages:CustomersListPage}"
+            Route="CustomersList" />
+    </FlyoutItem>
+
+    <!-- 8. Finance - Finance/Admin -->
+    <FlyoutItem Title="Finance" Icon="&#xf155;" IsVisible="{Binding IsFinanceOrAdmin}">
+        <ShellContent
+            Title="Invoices"
+            ContentTemplate="{DataTemplate pages:JobsListPage}"
+            Route="FinanceInvoices" />
+    </FlyoutItem>
+    
+    <!-- 6. Drivers - FleetOps/Admin/Dispatcher -->
+    <FlyoutItem Title="Drivers" Icon="&#xf0cd;" IsVisible="{Binding IsFleetOpsOrAdmin}">
+        <ShellContent
+            Title="Driver Roster"
+            ContentTemplate="{DataTemplate pages:JobsListPage}"
+            Route="DriversRoster" />
+    </FlyoutItem>
+    
+    <!-- 11. Admin - Admin Only -->
+    <FlyoutItem Title="Admin" Icon="&#xf0ad;" IsVisible="{Binding IsAdmin}">
+        <ShellContent
+            Title="Settings"
+            ContentTemplate="{DataTemplate pages:JobsListPage}"
+            Route="AdminSettings" />
+    </FlyoutItem>
+
+    <!-- Driver App Mobile View (Tab Bar for small screens) - Hidden in desktop view -->
+    <TabBar Route="DriverMobile" IsVisible="{Binding IsDriver}">
+        <ShellContent
+            Title="Home"
+            Icon="&#xf015;"
+            ContentTemplate="{DataTemplate pages:DriverHomePage}"
+            Route="DriverHome" />
+        <ShellContent
+            Title="Trips"
+            Icon="&#xf0c4;"
+            ContentTemplate="{DataTemplate pages:JobsListPage}"
+            Route="DriverTrips" />
+        <ShellContent
+            Title="HOS"
+            Icon="&#xf2f2;"
+            ContentTemplate="{DataTemplate pages:JobsListPage}"
+            Route="DriverHOS" />
+    </TabBar>
+    
+    <!-- Register Routes that are not in the Flyout (Detail Pages) -->
+    <Shell.FlyoutItems>
+        <ShellItem Route="JobDetailsRoute">
+            <ShellContent ContentTemplate="{DataTemplate pages:JobDetailPage}" />
+        </ShellItem>
+        <ShellItem Route="ClientProfileDetailsRoute">
+            <ShellContent ContentTemplate="{DataTemplate pages:ClientProfileDetailPage}" />
+        </ShellItem>
+    </Shell.FlyoutItems>
+    
+</Shell>
