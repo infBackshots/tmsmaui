@@ -1,0 +1,41 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Global Colors -->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- Base Style for Buttons -->
+    <Style TargetType="Button">
+        <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource White}}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="HeightRequest" Value="48" />
+    </Style>
+
+    <!-- Custom Style for Dashboard Widgets (referenced in DashboardPage.xaml) -->
+    <Style x:Key="WidgetButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#E0F0FF" />
+        <Setter Property="TextColor" Value="#003566" />
+        <Setter Property="BorderColor" Value="#BBDDFF" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="HeightRequest" Value="35" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    
+    <!-- Custom Style for Small Buttons (referenced in JobDetailPage.xaml) -->
+    <Style x:Key="SmallButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#A3A3A3" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="CornerRadius" Value="6" />
+        <!-- NOTE: The TmsStyles.css applies the final styling for these elements -->
+    </Style>
+    
+</ResourceDictionary>

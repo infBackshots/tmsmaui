@@ -1,0 +1,31 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Primary Brand Colors -->
+    <Color x:Key="Primary">#003566</Color>
+    <Color x:Key="Secondary">#FFC300</Color>
+    <Color x:Key="Tertiary">#4B88C4</Color>
+
+    <!-- Text Colors -->
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
+    <Color x:Key="Gray100">#E0E0E0</Color>
+    <Color x:Key="Gray900">#212121</Color>
+
+    <!-- System Colors -->
+    <Color x:Key="SuccessColor">#28A745</Color>
+    <Color x:Key="DangerColor">#DC3545</Color>
+    <Color x:Key="WarningColor">#F39C12</Color>
+
+    <!-- Default Theme Mappings -->
+    <Color x:Key="BackgroundColor">#F0F4F8</Color>
+    <Color x:Key="TextPrimaryColor">#333333</Color>
+    <Color x:Key="TextSecondaryColor">#666666</Color>
+    
+    <!-- App Theme Overrides -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+    <SolidColorBrush x:Key="TextPrimaryColorBrush" Color="{StaticResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="TextSecondaryColorBrush" Color="{StaticResource TextSecondaryColor}" />
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+
+</ResourceDictionary>

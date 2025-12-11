@@ -1,0 +1,54 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TruckingTmsMaui.App.ViewModels"
+             x:Class="TruckingTmsMaui.App.Pages.DispatchBoardPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:DispatchBoardViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Label Text="Dispatch Planning Board" FontSize="Large" FontAttributes="Bold" TextColor="#003566"/>
+            <Label Text="Visualize unassigned loads and driver/vehicle schedules." TextColor="#666"/>
+            
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="View Kanban" BackgroundColor="#007BFF" TextColor="White"/>
+                <Button Text="View Timeline" BackgroundColor="#A3A3A3" TextColor="White"/>
+                <Button Text="Live Map Overlay (Utah Focus)" Command="{Binding ShowLiveMapCommand}" BackgroundColor="#28A745" TextColor="White"/>
+            </HorizontalStackLayout>
+            
+            <!-- Kanban Board Placeholder -->
+            <Frame CornerRadius="10" Padding="20" BackgroundColor="White" HasShadow="True" HeightRequest="400" Margin="0, 10, 0, 0">
+                <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15">
+                    <VerticalStackLayout Grid.Column="0" Spacing="10">
+                        <Label Text="UNASSIGNED (3)" FontSize="Medium" FontAttributes="Bold" TextColor="#DC3545"/>
+                        <Frame BackgroundColor="#FCEAEA" Padding="10" CornerRadius="8">
+                            <Label Text="UT-1003: Ogden Pickup (Steel)" TextColor="#333"/>
+                        </Frame>
+                        <Frame BackgroundColor="#FCEAEA" Padding="10" CornerRadius="8">
+                            <Label Text="UT-1005: New Load (SLC)" TextColor="#333"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <VerticalStackLayout Grid.Column="1" Spacing="10">
+                        <Label Text="ASSIGNED / SCHEDULED (4)" FontSize="Medium" FontAttributes="Bold" TextColor="#F39C12"/>
+                        <Frame BackgroundColor="#FEF3D0" Padding="10" CornerRadius="8">
+                            <Label Text="UT-1001: Joe Driver (T101)" TextColor="#333"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <VerticalStackLayout Grid.Column="2" Spacing="10">
+                        <Label Text="IN-TRANSIT (1)" FontSize="Medium" FontAttributes="Bold" TextColor="#007BFF"/>
+                        <Frame BackgroundColor="#E0F0FF" Padding="10" CornerRadius="8">
+                            <Label Text="UT-0999: Jane Driver (T103)" TextColor="#333"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+            
+            <Label Text="Use drag-and-drop to assign loads (desktop only)." FontAttributes="Italic" TextColor="#999" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,56 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TruckingTmsMaui.App.ViewModels"
+             x:Class="TruckingTmsMaui.App.Pages.ClientProfileDetailPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:ClientProfileDetailViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+            <Label Text="{Binding ClientProfile.DisplayName}" FontSize="Title" FontAttributes="Bold" TextColor="#003566"/>
+            <Label Text="{Binding ClientProfile.Customer.Name, StringFormat='Linked Customer: {0}'}" FontSize="Subtitle" TextColor="#666"/>
+            
+            <!-- Profile Details Form -->
+            <Frame CornerRadius="10" Padding="15" HasShadow="True">
+                <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" ColumnSpacing="15" RowSpacing="15">
+                    
+                    <Label Grid.Row="0" Grid.Column="0" Text="Paperwork Email" FontAttributes="Bold"/>
+                    <Entry Grid.Row="0" Grid.Column="1" Text="{Binding ClientProfile.PaperworkDestinationEmail}"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" Text="Access Hours" FontAttributes="Bold"/>
+                    <Entry Grid.Row="1" Grid.Column="1" Text="{Binding ClientProfile.AccessHours}"/>
+                    
+                    <Label Grid.Row="2" Grid.Column="0" Text="Preferred Equipment" FontAttributes="Bold"/>
+                    <Entry Grid.Row="2" Grid.Column="1" Text="{Binding ClientProfile.PreferredEquipmentType}"/>
+
+                    <Label Grid.Row="3" Grid.Column="0" Text="Contact Name" FontAttributes="Bold"/>
+                    <Entry Grid.Row="3" Grid.Column="1" Text="{Binding ClientProfile.PreferredContactName}"/>
+                    
+                    <Label Grid.Row="4" Grid.Column="0" Text="Tags (e.g., High Priority)" FontAttributes="Bold"/>
+                    <Entry Grid.Row="4" Grid.Column="1" Text="{Binding ClientProfile.Tags}"/>
+                </Grid>
+            </Frame>
+            
+            <!-- Service Instructions -->
+            <Frame CornerRadius="10" Padding="15" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Service Instructions" FontSize="Medium" FontAttributes="Bold" TextColor="#003566"/>
+                    <Editor Text="{Binding ClientProfile.ServiceInstructions}" HeightRequest="150" BackgroundColor="#F7F9FB"/>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Actions -->
+            <Button Text="Save Client Profile" 
+                    Command="{Binding SaveProfileCommand}" 
+                    BackgroundColor="#28A745" 
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="50"/>
+                    
+            <Label Text="Note: Frequent Drivers are stored as comma-separated IDs in the backend." FontAttributes="Italic" FontSize="Micro" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
